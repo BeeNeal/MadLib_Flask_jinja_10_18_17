@@ -8,12 +8,6 @@ from flask import Flask, render_template, request
 # Flask wants to know this to know what any imported things are relative to.
 app = Flask(__name__)
 
-AWESOMENESS = [
-    'awesome', 'terrific', 'fantastic', 'neato', 'fantabulous', 'wowza',
-    'oh-so-not-meh', 'brilliant', 'ducky', 'coolio', 'incredible', 'wonderful',
-    'smashing', 'lovely',
-]
-
 
 @app.route('/')
 def start_here():
@@ -37,7 +31,7 @@ def greet_person():
 
     play_game = request.args.get("play_game")
 
-    return render_template("compliment.html",
+    return render_template("greeting.html",
                            person=player,
                            play_game=play_game)
 @app.route('/form')
@@ -59,9 +53,16 @@ def show_madlib():
     color = request.args.get("color")
     noun = request.args.get("noun")
     adjective = request.args.get("adjective")
+    beverages = request.args.getlist("beverages")
+    beverages = ", ".join(beverages)
+    madlib_options = ["madlib.html", "madlib3.html"]
 
-    return render_template("madlib.html", name=name, color=color, noun=noun,
-                            adjective=adjective)
+    return render_template(choice(madlib_options),
+                           name=name,
+                           color=color,
+                           noun=noun,
+                           adjective=adjective,
+                           beverages=beverages)
 
 
 if __name__ == '__main__':
